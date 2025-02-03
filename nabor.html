@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- FontAwesome Icons -->
     <style>
+        /* Existing Styles */
         body {
             font-family: 'Oswald', sans-serif;
             background: url('https://cdn.discordapp.com/attachments/1311702455465283627/1325892839510638702/Snimek_obrazovky_2025-01-06_183621.png?ex=678aa06e&is=67894eee&hm=bb71511880c62add9eb990638879725b6ff0c0736431afe4f529133cc687a6ec&') no-repeat center center fixed;
@@ -110,24 +111,20 @@
             transform: scale(1.05);
         }
 
-        /* Spinner styles */
-        #loadingSpinner {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border: 8px solid #f3f3f3; /* Light grey */
-            border-top: 8px solid #03521b; /* Green color */
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+            display: none;
+            margin: 20px auto;
         }
 
         @keyframes spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -194,14 +191,25 @@
 
             <button type="button" onclick="submitForm()">Odeslat</button>
         </form>
-    </div>
 
-    <!-- Loading Spinner -->
-    <div id="loadingSpinner"></div>
+        <div class="spinner" id="spinner"></div>
+    </div>
 
     <script>
         let lastSubmitTime = 0;
+
+        function validateForm() {
+            const age = document.getElementById('oocAge').value;
+            if (age < 18 || age > 100) {
+                alert('Věk musí být mezi 18 a 100 lety.');
+                return false;
+            }
+            return true;
+        }
+
         function submitForm() {
+            if (!validateForm()) return;
+
             const currentTime = new Date().getTime();
             const cooldownTime = 30000;
             if (currentTime - lastSubmitTime < cooldownTime) {
@@ -210,8 +218,7 @@
             }
             lastSubmitTime = currentTime;
 
-            // Show the loading spinner
-            document.getElementById('loadingSpinner').style.display = 'block';
+            document.getElementById("spinner").style.display = "block";  // Show spinner
 
             const webhookURL = 'https://discord.com/api/webhooks/1334958433765560460/tVGHB8B11McDWGb3RVCztfkr5CKA_N8wmTATTGOL9SxRQWokv3b-RqJOTtmMJyHDdv6W';
             const formData = {
@@ -241,26 +248,10 @@
                         color: 3447003
                     }
                 ],
-                components: [
-                    {
-                        type: 1,
-                        components: [
-                            {
-                                type: 2,
-                                label: "Schválit",
-                                style: 3,
-                                custom_id: "approve_application"
-                            },
-                            {
-                                type: 2,
-                                label: "Zamítnout",
-                                style: 4,
-                                custom_id: "reject_application"
-                            }
-                        ]
-                    }
-                ]
             };
+
+            // Debugging: log the webhook payload
+            console.log("Payload being sent:", JSON.stringify(embedMessage));
 
             fetch(webhookURL, {
                 method: 'POST',
@@ -268,9 +259,6 @@
                 body: JSON.stringify(embedMessage),
             })
             .then(response => {
-                // Hide the loading spinner
-                document.getElementById('loadingSpinner').style.display = 'none';
-                
                 if (response.ok) {
                     alert('Formulář byl úspěšně odeslán!');
                     document.getElementById('lspdForm').reset();
@@ -279,11 +267,11 @@
                 }
             })
             .catch(error => {
-                // Hide the loading spinner
-                document.getElementById('loadingSpinner').style.display = 'none';
-                
                 console.error('Error:', error);
                 alert('Došlo k chybě při odesílání formuláře.');
+            })
+            .finally(() => {
+                document.getElementById("spinner").style.display = "none";  // Hide spinner
             });
         }
     </script>
