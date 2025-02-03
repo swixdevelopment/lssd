@@ -271,12 +271,21 @@
                 // Hide the loading spinner
                 document.getElementById('loadingSpinner').style.display = 'none';
                 
-
+                if (response.ok) {
+                    alert('Formulář byl úspěšně odeslán!');
+                    document.getElementById('lspdForm').reset();
+                } else {
+                    alert('Došlo k chybě při odesílání formuláře.');
+                }
+            })
             .catch(error => {
                 // Hide the loading spinner
                 document.getElementById('loadingSpinner').style.display = 'none';
                 
-           
+                console.error('Error:', error);
+                alert('Došlo k chybě při odesílání formuláře.');
+            });
+        }
     </script>
 </body>
 </html>
