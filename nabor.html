@@ -3,19 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - LSPD Formuláře</title>
+    <title>Los Santos Sheriff Department Academy</title>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- FontAwesome Icons -->
     <style>
+        /* Existing Styles */
         body {
             font-family: 'Oswald', sans-serif;
-            background: #f4f4f4;
+            background: url('https://cdn.discordapp.com/attachments/1311702455465283627/1325892839510638702/Snimek_obrazovky_2025-01-06_183621.png?ex=678aa06e&is=67894eee&hm=bb71511880c62add9eb990638879725b6ff0c0736431afe4f529133cc687a6ec&') no-repeat center center fixed;
+            background-size: cover;
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
+            height: 100vh;
             box-sizing: border-box;
-            color: #333;
+            color: #fff;
         }
 
         .navbar {
@@ -41,61 +45,86 @@
             transition: color 0.3s;
         }
 
+        .navbar a i {
+            margin-right: 8px;
+        }
+
         .navbar a:hover {
             color: #03521b;
         }
 
-        .admin-panel {
-            margin-top: 80px;
-            width: 80%;
-            max-width: 1000px;
-        }
-
-        .form-entry {
-            background: #fff;
+        .form-container {
+            background: rgba(0, 0, 0, 0.8);
             padding: 20px;
-            margin: 10px 0;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 90%;
+            margin-top: 80px;
         }
 
         h1 {
             text-align: center;
+            margin-bottom: 10px;
             color: #03521b;
+            text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.7);
         }
 
-        table {
-            width: 100%;
+        h2 {
+            color: #03521b;
             margin-top: 20px;
-            border-collapse: collapse;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
 
-        table, th, td {
-            border: 1px solid #ddd;
+        p {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ddd;
         }
 
-        th, td {
-            padding: 12px;
-            text-align: left;
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
         }
 
-        th {
+        input, textarea, select, button {
+            width: calc(100% - 20px);
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.8);
+            color: #000;
+        }
+
+        button {
             background-color: #03521b;
             color: #fff;
-        }
-
-        .btn-delete {
-            background-color: red;
-            color: white;
             border: none;
             cursor: pointer;
-            padding: 5px 10px;
-            border-radius: 5px;
-            margin-left: 10px;
+            transition: background-color 0.3s, transform 0.2s;
         }
 
-        .btn-delete:hover {
-            background-color: darkred;
+        button:hover {
+            background-color: #0088cc;
+            transform: scale(1.05);
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+            display: none;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -104,81 +133,147 @@
     <!-- Navbar with Icons -->
     <div class="navbar">
         <a href="home.html"><i class="fas fa-home"></i> Domů</a>
-        <a href="admin_panel.html"><i class="fas fa-user-shield"></i> Admin Panel</a>
+        <a href="#"><i class="fas fa-envelope"></i> Kontakt</a>
     </div>
 
-    <!-- Admin Panel Section -->
-    <div class="admin-panel">
-        <h1>Admin Panel - Přihlášky do LSSD</h1>
-
-        <h2>Seznam všech odeslaných formulářů</h2>
+    <!-- Form Section -->
+    <div class="form-container">
+        <h1>Los Santos Sheriff Department Academy</h1>
+        <p>Vyplňte tento formulář, pokud máte zájem připojit se k Los Santos Police Department (LSPD) jako kadet. Pečlivě vyplňte všechny požadované informace a ujistěte se, že jsou pravdivé a přesné. Po odeslání bude vaše přihláška posouzena a v případě splnění požadavků budete pozváni na pohovor.</p>
         
-        <!-- Example table of form entries -->
-        <table id="formTable">
-            <thead>
-                <tr>
-                    <th>Discord</th>
-                    <th>Věk</th>
-                    <th>Jméno</th>
-                    <th>Datum narození</th>
-                    <th>Akce</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Form data will be loaded here dynamically -->
-            </tbody>
-        </table>
+        <form id="lspdForm">
+            <h2>OOC Kategorie</h2>
+            <label for="discordNick">Váš Discord nickname:</label>
+            <input type="text" id="discordNick" name="discordNick" required>
 
+            <label for="oocAge">Váš OOC věk:</label>
+            <input type="number" id="oocAge" name="oocAge" required>
+
+            <label for="rpExperience">Vaše RP zkušenosti:</label>
+            <textarea id="rpExperience" name="rpExperience" rows="3" required></textarea>
+
+            <h2>Kategorie In Character</h2>
+            <label for="icName">Vaše celé jméno:</label>
+            <input type="text" id="icName" name="icName" required>
+
+            <label for="birthDate">Vaše datum narození:</label>
+            <input type="date" id="birthDate" name="birthDate" required>
+
+            <label for="education">Vaše nejvyšší dosažené vzdělání:</label>
+            <input type="text" id="education" name="education" required>
+
+            <label>Máte čistý trestní rejstřík?</label>
+            <select id="cleanRecord" name="cleanRecord" required>
+                <option value="Ano">Ano</option>
+                <option value="Ne">Ne</option>
+            </select>
+
+            <label>Jste ochoten/ochotna projít fyzickými a psychologickými testy?</label>
+            <select id="testsWilling" name="testsWilling" required>
+                <option value="Ano">Ano</option>
+                <option value="Ne">Ne</option>
+            </select>
+
+            <label>Jste obeznámen/a s pravidly a standardy LSSD?</label>
+            <select id="rulesAware" name="rulesAware" required>
+                <option value="Ano">Ano</option>
+                <option value="Ne">Ne</option>
+            </select>
+
+            <label for="whyJoin">Proč chcete vstoupit do LSSD?</label>
+            <textarea id="whyJoin" name="whyJoin" rows="3" required></textarea>
+
+            <label for="experience">Máte nějaké předchozí zkušenosti v oblasti bezpečnosti nebo veřejné správy?</label>
+            <textarea id="experience" name="experience" rows="3" required></textarea>
+
+            <label for="strengths">Jaké dovednosti nebo vlastnosti považujete za své silné stránky?</label>
+            <textarea id="strengths" name="strengths" rows="3" required></textarea>
+
+            <button type="button" onclick="submitForm()">Odeslat</button>
+        </form>
+
+        <div class="spinner" id="spinner"></div>
     </div>
 
     <script>
-        // This function would be used to load form data from the server
-        function loadFormData() {
-            // Example API endpoint for fetching form data (replace with your actual endpoint)
-            fetch('/get-forms')  // This would be the backend API endpoint to fetch all submitted forms
-                .then(response => response.json())
-                .then(data => {
-                    const tableBody = document.querySelector('#formTable tbody');
-                    tableBody.innerHTML = '';  // Clear existing entries
+        let lastSubmitTime = 0;
 
-                    data.forEach(entry => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${entry.discordNick}</td>
-                            <td>${entry.oocAge}</td>
-                            <td>${entry.icName}</td>
-                            <td>${entry.birthDate}</td>
-                            <td>
-                                <button class="btn-delete" onclick="deleteForm('${entry.id}')">Smazat</button>
-                            </td>
-                        `;
-                        tableBody.appendChild(row);
-                    });
-                })
-                .catch(error => console.error('Error loading form data:', error));
+        function validateForm() {
+            const age = document.getElementById('oocAge').value;
+            if (age < 18 || age > 100) {
+                alert('Věk musí být mezi 18 a 100 lety.');
+                return false;
+            }
+            return true;
         }
 
-        // This function would be used to delete a form entry
-        function deleteForm(formId) {
-            // Example API endpoint for deleting a form (replace with your actual endpoint)
-            fetch(`/delete-form/${formId}`, { method: 'DELETE' })
-                .then(response => {
-                    if (response.ok) {
-                        alert('Formulář byl úspěšně smazán.');
-                        loadFormData();  // Reload the form data after deletion
-                    } else {
-                        alert('Došlo k chybě při mazání formuláře.');
+        function submitForm() {
+            if (!validateForm()) return;
+
+            const currentTime = new Date().getTime();
+            const cooldownTime = 30000;
+            if (currentTime - lastSubmitTime < cooldownTime) {
+                alert('Pošlete formulář znovu až po 30 sekundách.');
+                return;
+            }
+            lastSubmitTime = currentTime;
+
+            document.getElementById("spinner").style.display = "block";  // Show spinner
+
+            const webhookURL = 'https://discord.com/api/webhooks/1334958433765560460/tVGHB8B11McDWGb3RVCztfkr5CKA_N8wmTATTGOL9SxRQWokv3b-RqJOTtmMJyHDdv6W';
+            const formData = {
+                discordNick: document.getElementById('discordNick').value,
+                oocAge: document.getElementById('oocAge').value,
+                rpExperience: document.getElementById('rpExperience').value,
+                icName: document.getElementById('icName').value,
+                birthDate: document.getElementById('birthDate').value,
+                education: document.getElementById('education').value,
+                cleanRecord: document.getElementById('cleanRecord').value,
+                testsWilling: document.getElementById('testsWilling').value,
+                rulesAware: document.getElementById('rulesAware').value,
+                whyJoin: document.getElementById('whyJoin').value,
+                experience: document.getElementById('experience').value,
+                strengths: document.getElementById('strengths').value,
+            };
+
+            const embedMessage = {
+                content: "# NOVÝ FORMULÁŘ! @everyone",
+                embeds: [
+                    {
+                        title: 'Nová Přihláška do LSSD TRAINEE PROGRAMU',
+                        fields: [
+                            { name: 'OOC Kategorie', value: `**Discord:** ${formData.discordNick}\n**Věk:** ${formData.oocAge}\n**RP zkušenosti:** ${formData.rpExperience}` },
+                            { name: 'In Character Kategorie', value: `**Jméno:** ${formData.icName}\n**Datum narození:** ${formData.birthDate}\n**Vzdělání:** ${formData.education}\n**Čistý trestní rejstřík:** ${formData.cleanRecord}\n**Ochota testů:** ${formData.testsWilling}\n**Obeznámen s pravidly:** ${formData.rulesAware}\n**Důvod:** ${formData.whyJoin}\n**Předchozí zkušenosti:** ${formData.experience}\n**Silné stránky:** ${formData.strengths}` }
+                        ],
+                        color: 3447003
                     }
-                })
-                .catch(error => {
-                    console.error('Error deleting form:', error);
-                    alert('Došlo k chybě při mazání formuláře.');
-                });
+                ],
+            };
+
+            // Debugging: log the webhook payload
+            console.log("Payload being sent:", JSON.stringify(embedMessage));
+
+            fetch(webhookURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(embedMessage),
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Formulář byl úspěšně odeslán!');
+                    document.getElementById('lspdForm').reset();
+                } else {
+                    alert('Došlo k chybě při odesílání formuláře.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Došlo k chybě při odesílání formuláře.');
+            })
+            .finally(() => {
+                document.getElementById("spinner").style.display = "none";  // Hide spinner
+            });
         }
-
-        // Load the form data when the page loads
-        window.onload = loadFormData;
     </script>
-
 </body>
 </html>
