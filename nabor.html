@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Los Santos Sheriff Department Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- FontAwesome Icons -->
+    <style>
+        body {
+            font-family: 'Oswald', sans-serif;
+            background: url('https://cdn.discordapp.com/attachments/1311702455465283627/1325892839510638702/Snimek_obrazovky_2025-01-06_183621.png') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            box-sizing: border-box;
+            color: #fff;
+        }
+
+        .navbar {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 0;
+            display: flex;
+            justify-content: center;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6);
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 18px;
+            margin: 0 15px;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s;
+        }
+
+        .navbar a:hover {
+            color: #03521b;
+        }
+
+        .form-container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 90%;
+            margin-top: 80px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #03521b;
+        }
+
+        h2 {
+            color: #03521b;
+            margin-top: 20px;
+        }
+
+        p {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+
+        input, textarea, select, button {
+            width: calc(100% - 20px);
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.8);
+            color: #000;
+        }
+
+        button {
+            background-color: #03521b;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0088cc;
+        }
+
+        /* Loading spinner */
+        #loadingSpinner {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #03521b;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="home.html"><i class="fas fa-home"></i> Domů</a>
+        <a href="#"><i class="fas fa-envelope"></i> Kontakt</a>
+    </div>
+
+    <!-- Form Section -->
+    <div class="form-container">
+        <h1>Los Santos Sheriff Department Academy</h1>
+        <p>Vyplňte tento formulář, pokud máte zájem připojit se k Los Santos Police Department (LSPD) jako kadet. Pečlivě vyplňte všechny požadované informace a ujistěte se, že jsou pravdivé a přesné. Po odeslání bude vaše přihláška posouzena a v případě splnění požadavků budete pozváni na pohovor.</p>
+        
+        <form id="lspdForm">
+            <h2>OOC Kategorie</h2>
+            <label for="discordNick">Váš Discord nickname:</label>
+            <input type="text" id="discordNick" name="discordNick" required>
+
+            <label for="oocAge">Váš OOC věk:</label>
+            <input type="number" id="oocAge" name="oocAge" required>
+
+            <label for="rpExperience">Vaše RP zkušenosti:</label>
+            <textarea id="rpExperience" name="rpExperience" rows="3" required></textarea>
+
+            <h2>Kategorie In Character</h2>
+            <label for="icName">Vaše celé jméno:</label>
+            <input type="text" id="icName" name="icName" required>
+
+            <label for="birthDate">Vaše datum narození:</label>
+            <input type="date" id="birthDate" name="birthDate" required>
+
+            <label for="education">Vaše nejvyšší dosažené vzdělání:</label>
+            <input type="text" id="education" name="education" required>
+
+            <label for="cleanRecord">Máte čistý trestní rejstřík?</label>
+            <select id="cleanRecord" name="cleanRecord" required>
+                <option value="Ano">Ano</option>
+                <option value="Ne">Ne</option>
+            </select>
+
+            <label for="testsWilling">Jste ochoten/ochotna projít fyzickými a psychologickými testy?</label>
+            <select id="testsWilling" name="testsWilling" required>
+                <option value="Ano">Ano</option>
+                <option value="Ne">Ne</option>
+            </select>
+
+            <label for="rulesAware">Jste obeznámen/a s pravidly a standardy LSSD?</label>
+            <select id="rulesAware" name="rulesAware" required>
+                <option value="Ano">Ano</option>
+                <option value="Ne">Ne</option>
+            </select>
+
+            <label for="whyJoin">Proč chcete vstoupit do LSSD?</label>
+            <textarea id="whyJoin" name="whyJoin" rows="3" required></textarea>
+
+            <button type="button" onclick="submitForm()">Odeslat</button>
+        </form>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner"></div>
+
+    <script>
+        let lastSubmitTime = 0;
+
+        function submitForm() {
+            const currentTime = new Date().getTime();
+            const cooldownTime = 30000;
+
+            // Prevent form submission too soon
+            if (currentTime - lastSubmitTime < cooldownTime) {
+                alert('Pošlete formulář znovu až po 30 sekundách.');
+                return;
+            }
+            lastSubmitTime = currentTime;
+
+            // Show the loading spinner
+            document.getElementById('loadingSpinner').style.display = 'block';
+
+            // Gather form data
+            const formData = {
+                discordNick: document.getElementById('discordNick').value,
+                oocAge: document.getElementById('oocAge').value,
+                rpExperience: document.getElementById('rpExperience').value,
+                icName: document.getElementById('icName').value,
+                birthDate: document.getElementById('birthDate').value,
+                education: document.getElementById('education').value,
+                cleanRecord: document.getElementById('cleanRecord').value,
+                testsWilling: document.getElementById('testsWilling').value,
+                rulesAware: document.getElementById('rulesAware').value,
+                whyJoin: document.getElementById('whyJoin').value,
+            };
+
+            // Log the form data for debugging
+            console.log('Form data:', formData);
+
+            // Prepare the webhook message
+            const webhookURL = 'https://discord.com/api/webhooks/YOUR_WEBHOOK_URL_HERE';
+            const embedMessage = {
+                content: 'Nová přihláška do LSSD:',
+                embeds: [{
+                    title: 'Přihláška',
+                    fields: Object.keys(formData).map((key) => ({
+                        name: key,
+                        value: formData[key],
+                        inline: false,
+                    })),
+                    color: 5633926, // Green color
+                }]
+            };
+
+            // Send the data to the webhook
+            fetch(webhookURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(embedMessage),
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Formulář byl úspěšně odeslán!');
+                } else {
+                    alert('Došlo k chybě při odesílání formuláře.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Chyba při odesílání. Zkuste to znovu.');
+            })
+            .finally(() => {
+                // Hide the loading spinner after submission
+                document.getElementById('loadingSpinner').style.display = 'none';
+            });
+        }
+    </script>
+</body>
+</html>
