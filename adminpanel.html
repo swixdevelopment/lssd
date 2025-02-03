@@ -3,182 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - LSPD Formuláře</title>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500&display=swap" rel="stylesheet">
+    <title>Admin Panel</title>
     <style>
         body {
-            font-family: 'Oswald', sans-serif;
-            background: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            box-sizing: border-box;
-            color: #333;
+            font-family: Arial, sans-serif;
         }
 
-        .navbar {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 10px 0;
-            display: flex;
-            justify-content: center;
-            position: fixed;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6);
-        }
-
-        .navbar a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 18px;
-            margin: 0 15px;
-            display: flex;
-            align-items: center;
-            transition: color 0.3s;
-        }
-
-        .navbar a:hover {
-            color: #03521b;
-        }
-
-        .admin-panel {
-            margin-top: 80px;
+        .table {
             width: 80%;
-            max-width: 1000px;
-        }
-
-        .form-entry {
-            background: #fff;
-            padding: 20px;
-            margin: 10px 0;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            text-align: center;
-            color: #03521b;
-        }
-
-        table {
-            width: 100%;
-            margin-top: 20px;
+            margin: 20px auto;
             border-collapse: collapse;
         }
 
-        table, th, td {
+        .table, .table th, .table td {
             border: 1px solid #ddd;
         }
 
-        th, td {
-            padding: 12px;
+        .table th, .table td {
+            padding: 10px;
             text-align: left;
         }
 
-        th {
+        .table th {
             background-color: #03521b;
-            color: #fff;
+            color: white;
         }
 
-        .btn-delete {
+        button {
             background-color: red;
             color: white;
+            padding: 5px 10px;
             border: none;
             cursor: pointer;
-            padding: 5px 10px;
-            border-radius: 5px;
-            margin-left: 10px;
         }
 
-        .btn-delete:hover {
+        button:hover {
             background-color: darkred;
         }
     </style>
 </head>
 <body>
-
-    <!-- Navbar with Icons -->
-    <div class="navbar">
-        <a href="home.html"><i class="fas fa-home"></i> Domů</a>
-        <a href="admin_panel.html"><i class="fas fa-user-shield"></i> Admin Panel</a>
-    </div>
-
-    <!-- Admin Panel Section -->
-    <div class="admin-panel">
-        <h1>Admin Panel - Přihlášky do LSSD</h1>
-
-        <h2>Seznam všech odeslaných formulářů</h2>
-        
-        <!-- Example table of form entries -->
-        <table id="formTable">
-            <thead>
-                <tr>
-                    <th>Discord</th>
-                    <th>Věk</th>
-                    <th>Jméno</th>
-                    <th>Datum narození</th>
-                    <th>Akce</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Form data will be loaded here dynamically -->
-            </tbody>
-        </table>
-
-    </div>
+    <h1>Admin Panel - Zobrazení přihlášek</h1>
+    <table class="table" id="formTable">
+        <thead>
+            <tr>
+                <th>Discord Nickname</th>
+                <th>Věk</th>
+                <th>IC Jméno</th>
+                <th>Datum narození</th>
+                <th>Akce</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Formuláře budou načteny zde -->
+        </tbody>
+    </table>
 
     <script>
-        // This function would be used to load form data from the server
         function loadFormData() {
-            // Example API endpoint for fetching form data (replace with your actual endpoint)
-            fetch('/get-forms')  // This would be the backend API endpoint to fetch all submitted forms
+            fetch('https://lspd-form-backend.herokuapp.com/get-forms')
                 .then(response => response.json())
                 .then(data => {
                     const tableBody = document.querySelector('#formTable tbody');
-                    tableBody.innerHTML = '';  // Clear existing entries
-
-                    data.forEach(entry => {
+                    tableBody.innerHTML = '';
+                    data.forEach(form => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
-                            <td>${entry.discordNick}</td>
-                            <td>${entry.oocAge}</td>
-                            <td>${entry.icName}</td>
-                            <td>${entry.birthDate}</td>
+                            <td>${form.discordNick}</td>
+                            <td>${form.oocAge}</td>
+                            <td>${form.icName}</td>
+                            <td>${form.birthDate}</td>
                             <td>
-                                <button class="btn-delete" onclick="deleteForm('${entry.id}')">Smazat</button>
+                                <button onclick="deleteForm('${form._id}')">Smazat</button>
                             </td>
                         `;
                         tableBody.appendChild(row);
                     });
                 })
-                .catch(error => console.error('Error loading form data:', error));
+                .catch(error => console.error('Chyba při načítání formulářů:', error));
         }
 
-        // This function would be used to delete a form entry
         function deleteForm(formId) {
-            // Example API endpoint for deleting a form (replace with your actual endpoint)
-            fetch(`/delete-form/${formId}`, { method: 'DELETE' })
-                .then(response => {
-                    if (response.ok) {
-                        alert('Formulář byl úspěšně smazán.');
-                        loadFormData();  // Reload the form data after deletion
-                    } else {
-                        alert('Došlo k chybě při mazání formuláře.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error deleting form:', error);
-                    alert('Došlo k chybě při mazání formuláře.');
-                });
+            fetch(`https://lspd-form-backend.herokuapp.com/delete-form/${formId}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Formulář byl smazán');
+                loadFormData(); // Znovu načteme formuláře
+            })
+            .catch(error => console.error('Chyba při mazání formuláře:', error));
         }
 
-        // Load the form data when the page loads
         window.onload = loadFormData;
     </script>
-
 </body>
 </html>
