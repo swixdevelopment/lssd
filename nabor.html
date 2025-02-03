@@ -9,7 +9,7 @@
     <style>
         body {
             font-family: 'Oswald', sans-serif;
-            background: url('https://cdn.discordapp.com/attachments/1311702455465283627/1325892839510638702/Snimek_obrazovky_2025-01-06_183621.png') no-repeat center center fixed;
+            background: url('https://cdn.discordapp.com/attachments/1311702455465283627/1325892839510638702/Snimek_obrazovky_2025-01-06_183621.png?ex=678aa06e&is=67894eee&hm=bb71511880c62add9eb990638879725b6ff0c0736431afe4f529133cc687a6ec&') no-repeat center center fixed;
             background-size: cover;
             margin: 0;
             padding: 0;
@@ -44,6 +44,10 @@
             transition: color 0.3s;
         }
 
+        .navbar a i {
+            margin-right: 8px;
+        }
+
         .navbar a:hover {
             color: #03521b;
         }
@@ -62,11 +66,13 @@
             text-align: center;
             margin-bottom: 10px;
             color: #03521b;
+            text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.7);
         }
 
         h2 {
             color: #03521b;
             margin-top: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
 
         p {
@@ -96,36 +102,19 @@
             color: #fff;
             border: none;
             cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
         }
 
         button:hover {
             background-color: #0088cc;
+            transform: scale(1.05);
         }
 
-        /* Loading spinner */
-        #loadingSpinner {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border: 8px solid #f3f3f3;
-            border-top: 8px solid #03521b;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
     </style>
 </head>
 <body>
 
-    <!-- Navbar -->
+    <!-- Navbar with Icons -->
     <div class="navbar">
         <a href="home.html"><i class="fas fa-home"></i> Domů</a>
         <a href="#"><i class="fas fa-envelope"></i> Kontakt</a>
@@ -157,19 +146,19 @@
             <label for="education">Vaše nejvyšší dosažené vzdělání:</label>
             <input type="text" id="education" name="education" required>
 
-            <label for="cleanRecord">Máte čistý trestní rejstřík?</label>
+            <label>Máte čistý trestní rejstřík?</label>
             <select id="cleanRecord" name="cleanRecord" required>
                 <option value="Ano">Ano</option>
                 <option value="Ne">Ne</option>
             </select>
 
-            <label for="testsWilling">Jste ochoten/ochotna projít fyzickými a psychologickými testy?</label>
+            <label>Jste ochoten/ochotna projít fyzickými a psychologickými testy?</label>
             <select id="testsWilling" name="testsWilling" required>
                 <option value="Ano">Ano</option>
                 <option value="Ne">Ne</option>
             </select>
 
-            <label for="rulesAware">Jste obeznámen/a s pravidly a standardy LSSD?</label>
+            <label>Jste obeznámen/a s pravidly a standardy LSSD?</label>
             <select id="rulesAware" name="rulesAware" required>
                 <option value="Ano">Ano</option>
                 <option value="Ne">Ne</option>
@@ -178,31 +167,28 @@
             <label for="whyJoin">Proč chcete vstoupit do LSSD?</label>
             <textarea id="whyJoin" name="whyJoin" rows="3" required></textarea>
 
+            <label for="experience">Máte nějaké předchozí zkušenosti v oblasti bezpečnosti nebo veřejné správy?</label>
+            <textarea id="experience" name="experience" rows="3" required></textarea>
+
+            <label for="strengths">Jaké dovednosti nebo vlastnosti považujete za své silné stránky?</label>
+            <textarea id="strengths" name="strengths" rows="3" required></textarea>
+
             <button type="button" onclick="submitForm()">Odeslat</button>
         </form>
     </div>
 
-    <!-- Loading Spinner -->
-    <div id="loadingSpinner"></div>
-
     <script>
         let lastSubmitTime = 0;
-
         function submitForm() {
             const currentTime = new Date().getTime();
             const cooldownTime = 30000;
-
-            // Prevent form submission too soon
             if (currentTime - lastSubmitTime < cooldownTime) {
                 alert('Pošlete formulář znovu až po 30 sekundách.');
                 return;
             }
             lastSubmitTime = currentTime;
-
-            // Show the loading spinner
-            document.getElementById('loadingSpinner').style.display = 'block';
-
-            // Gather form data
+            
+            const webhookURL = 'https://discord.com/api/webhooks/1334958433765560460/tVGHB8B11McDWGb3RVCztfkr5CKA_N8wmTATTGOL9SxRQWokv3b-RqJOTtmMJyHDdv6W';
             const formData = {
                 discordNick: document.getElementById('discordNick').value,
                 oocAge: document.getElementById('oocAge').value,
@@ -214,48 +200,59 @@
                 testsWilling: document.getElementById('testsWilling').value,
                 rulesAware: document.getElementById('rulesAware').value,
                 whyJoin: document.getElementById('whyJoin').value,
+                experience: document.getElementById('experience').value,
+                strengths: document.getElementById('strengths').value,
             };
-
-            // Log the form data for debugging
-            console.log('Form data:', formData);
-
-            // Prepare the webhook message
-            const webhookURL = 'https://discord.com/api/webhooks/YOUR_WEBHOOK_URL_HERE';
+            
             const embedMessage = {
-                content: 'Nová přihláška do LSSD:',
-                embeds: [{
-                    title: 'Přihláška',
-                    fields: Object.keys(formData).map((key) => ({
-                        name: key,
-                        value: formData[key],
-                        inline: false,
-                    })),
-                    color: 5633926, // Green color
-                }]
+                content: "# NOVÝ FORMULÁŘ! @everyone",
+                embeds: [
+                    {
+                        title: 'Nová Přihláška do LSSD TRAINEE PROGRAMU',
+                        fields: [
+                            { name: 'OOC Kategorie', value: `**Discord:** ${formData.discordNick}\n**Věk:** ${formData.oocAge}\n**RP zkušenosti:** ${formData.rpExperience}` },
+                            { name: 'In Character Kategorie', value: `**Jméno:** ${formData.icName}\n**Datum narození:** ${formData.birthDate}\n**Vzdělání:** ${formData.education}\n**Čistý trestní rejstřík:** ${formData.cleanRecord}\n**Ochota testů:** ${formData.testsWilling}\n**Obeznámen s pravidly:** ${formData.rulesAware}\n**Důvod:** ${formData.whyJoin}\n**Předchozí zkušenosti:** ${formData.experience}\n**Silné stránky:** ${formData.strengths}` }
+                        ],
+                        color: 3447003
+                    }
+                ],
+                components: [
+                    {
+                        type: 1,
+                        components: [
+                            {
+                                type: 2,
+                                label: "Schválit",
+                                style: 3,
+                                custom_id: "approve_application"
+                            },
+                            {
+                                type: 2,
+                                label: "Zamítnout",
+                                style: 4,
+                                custom_id: "reject_application"
+                            }
+                        ]
+                    }
+                ]
             };
-
-            // Send the data to the webhook
+    
             fetch(webhookURL, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(embedMessage),
             })
             .then(response => {
                 if (response.ok) {
                     alert('Formulář byl úspěšně odeslán!');
+                    document.getElementById('lspdForm').reset();
                 } else {
                     alert('Došlo k chybě při odesílání formuláře.');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Chyba při odesílání. Zkuste to znovu.');
-            })
-            .finally(() => {
-                // Hide the loading spinner after submission
-                document.getElementById('loadingSpinner').style.display = 'none';
+                alert('Došlo k chybě při odesílání formuláře.');
             });
         }
     </script>
