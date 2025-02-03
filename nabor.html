@@ -110,6 +110,25 @@
             transform: scale(1.05);
         }
 
+        /* Spinner styles */
+        #loadingSpinner {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 8px solid #f3f3f3; /* Light grey */
+            border-top: 8px solid #03521b; /* Green color */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -177,6 +196,9 @@
         </form>
     </div>
 
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner"></div>
+
     <script>
         let lastSubmitTime = 0;
         function submitForm() {
@@ -187,7 +209,10 @@
                 return;
             }
             lastSubmitTime = currentTime;
-            
+
+            // Show the loading spinner
+            document.getElementById('loadingSpinner').style.display = 'block';
+
             const webhookURL = 'https://discord.com/api/webhooks/1334958433765560460/tVGHB8B11McDWGb3RVCztfkr5CKA_N8wmTATTGOL9SxRQWokv3b-RqJOTtmMJyHDdv6W';
             const formData = {
                 discordNick: document.getElementById('discordNick').value,
@@ -203,7 +228,7 @@
                 experience: document.getElementById('experience').value,
                 strengths: document.getElementById('strengths').value,
             };
-            
+
             const embedMessage = {
                 content: "# NOVÝ FORMULÁŘ! @everyone",
                 embeds: [
@@ -236,21 +261,22 @@
                     }
                 ]
             };
-    
+
             fetch(webhookURL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(embedMessage),
             })
             .then(response => {
-                if (response.ok) {
-                    alert('Formulář byl úspěšně odeslán!');
-                    document.getElementById('lspdForm').reset();
-                } else {
-                    alert('Došlo k chybě při odesílání formuláře.');
-                }
-            })
-        
+                // Hide the loading spinner
+                document.getElementById('loadingSpinner').style.display = 'none';
+                
+
+            .catch(error => {
+                // Hide the loading spinner
+                document.getElementById('loadingSpinner').style.display = 'none';
+                
+           
     </script>
 </body>
 </html>
