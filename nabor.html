@@ -5,18 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Los Santos Sheriff Department Academy</title>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    /* CSS proměnné pro úpravu barev */
+    /* CSS proměnné pro snadné nastavení barev */
     :root {
       --primary-color: #03521b;
       --secondary-color: #0088cc;
       --background-overlay: rgba(0, 0, 0, 0.8);
       --text-shadow-main: 2px 2px 3px rgba(0, 0, 0, 0.7);
       --text-shadow-sub: 1px 1px 2px rgba(0, 0, 0, 0.5);
+      --button-hover-scale: 1.05;
     }
 
     /* Základní styly */
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Oswald', sans-serif;
       background: url('https://cdn.discordapp.com/attachments/1311702455465283627/1325892839510638702/Snimek_obrazovky_2025-01-06_183621.png?ex=678aa06e&is=67894eee&hm=bb71511880c62add9eb990638879725b6ff0c0736431afe4f529133cc687a6ec&') no-repeat center center fixed;
@@ -27,7 +32,6 @@
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
-      box-sizing: border-box;
       color: #fff;
     }
 
@@ -75,16 +79,16 @@
 
     .form-container {
       background: var(--background-overlay);
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      padding: 30px 20px;
+      border-radius: 10px;
+      box-shadow: 0 8px 10px rgba(0, 0, 0, 0.4);
       max-width: 600px;
       width: 90%;
     }
 
     h1 {
       text-align: center;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
       color: var(--primary-color);
       text-shadow: var(--text-shadow-main);
     }
@@ -107,28 +111,46 @@
       display: block;
     }
 
-    input, textarea, select, button {
-      width: calc(100% - 20px);
+    input, textarea, select {
+      width: 100%;
       margin: 10px 0;
       padding: 10px;
       border: 1px solid #333;
       border-radius: 5px;
       background: rgba(255, 255, 255, 0.8);
       color: #000;
-      box-sizing: border-box;
+      font-size: 16px;
     }
 
     button {
+      width: 100%;
+      padding: 12px;
       background-color: var(--primary-color);
       color: #fff;
       border: none;
+      border-radius: 5px;
+      font-size: 18px;
       cursor: pointer;
       transition: background-color 0.3s, transform 0.2s;
     }
 
     button:hover {
       background-color: var(--secondary-color);
-      transform: scale(1.05);
+      transform: scale(var(--button-hover-scale));
+    }
+
+    button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    /* Spinner a nápis během odesílání */
+    .spinner-container {
+      display: none;
+      margin-top: 20px;
+      text-align: center;
+      color: #fff;
+      font-size: 18px;
     }
 
     .spinner {
@@ -138,8 +160,9 @@
       width: 40px;
       height: 40px;
       animation: spin 2s linear infinite;
-      display: none;
-      margin: 20px auto;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 10px;
     }
 
     @keyframes spin {
@@ -215,7 +238,11 @@
         <button type="button" id="submitButton" onclick="submitForm()">Odeslat</button>
       </form>
 
-      <div class="spinner" id="spinner"></div>
+      <!-- Spinner a text při odesílání -->
+      <div class="spinner-container" id="spinnerContainer">
+        <div class="spinner"></div>
+        <span>Odesílání...</span>
+      </div>
     </div>
   </main>
 
@@ -242,11 +269,10 @@
       }
       lastSubmitTime = currentTime;
 
-      // Deaktivace tlačítka a zobrazení spinneru
       const submitButton = document.getElementById('submitButton');
       submitButton.disabled = true;
-      submitButton.textContent = "Odesílám...";
-      document.getElementById("spinner").style.display = "block";
+      submitButton.textContent = "Zpracovávám...";
+      document.getElementById("spinnerContainer").style.display = "block";
 
       const webhookURL = 'https://discord.com/api/webhooks/1334958433765560460/tVGHB8B11McDWGb3RVCztfkr5CKA_N8wmTATTGOL9SxRQWokv3b-RqJOTtmMJyHDdv6W';
       const formData = {
@@ -284,7 +310,6 @@
         ],
       };
 
-      // Debugging: log payload
       console.log("Payload being sent:", JSON.stringify(embedMessage));
 
       fetch(webhookURL, {
@@ -305,8 +330,7 @@
         alert('Došlo k chybě při odesílání formuláře.');
       })
       .finally(() => {
-        // Skrytí spinneru a obnovení tlačítka
-        document.getElementById("spinner").style.display = "none";
+        document.getElementById("spinnerContainer").style.display = "none";
         submitButton.disabled = false;
         submitButton.textContent = "Odeslat";
       });
