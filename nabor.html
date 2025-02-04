@@ -6,10 +6,133 @@
     <title>Los Santos Sheriff Department</title>
     <link rel="icon" type="image/png" href="https://lssd.cz/wp-content/uploads/2024/01/Ce1JUe9.png">
     <style>
+    :root {
+      --lssd-green: #2E5C1E;      /* Tmavě zelená LSSD */
+      --lssd-gold: #C4A66B;       /* Zlatá LSSD */
+      --lssd-brown: #513B2C;      /* Hnědá pro detaily */
+      --lssd-beige: #F4E9D8;      /* Béžová pro pozadí */
+      --lssd-dark: #1C1810;       /* Tmavá pro text */
+      --lssd-accent: #FFD700;
+      --lssd-error: #FF4444;
+      --lssd-success: #43B581;
+      --lssd-warning: #FAA61A;
+      --lssd-info: #7289DA;
+      --lssd-background-light: rgba(244, 233, 216, 0.95);
+      --lssd-background-dark: rgba(28, 24, 16, 0.98);
+      --lssd-text-light: #333333;
+      --lssd-text-dark: #FFFFFF;
+      --lssd-border: rgba(196, 166, 107, 0.3);
+      --form-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      --input-focus-glow: 0 0 15px var(--lssd-gold);
+      --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 12px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--lssd-green);
+      border-radius: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--lssd-dark);
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      position: fixed;
+      top: 0;
+      z-index: 1001;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--lssd-green);
+      width: 0;
+      transition: width 0.3s ease;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -1000px 0; }
+      100% { background-position: 1000px 0; }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes glowPulse {
+      0% { box-shadow: 0 0 5px var(--lssd-accent); }
+      50% { box-shadow: 0 0 20px var(--lssd-accent); }
+      100% { box-shadow: 0 0 5px var(--lssd-accent); }
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    @keyframes gradient {
+      0% { background-position: 0% 50% }
+      50% { background-position: 100% 50% }
+      100% { background-position: 0% 50% }
+    }
+
+    .form-container {
+      animation: fadeIn 0.5s ease-out;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: var(--form-shadow);
+    }
+
+    /* LSSD Styling Updates */
+    .form-container {
+      border: 2px solid var(--lssd-gold);
+      background: rgba(28, 24, 16, 0.95);
+      box-shadow: 0 0 20px rgba(196, 166, 107, 0.2);
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--lssd-green);
+      box-shadow: 0 0 5px var(--lssd-green);
+      outline: none;
+    }
+
+    /* Section Headers */
+    .section-header {
+      border-left: 4px solid var(--lssd-gold);
+      padding-left: 10px;
+      margin: 20px 0;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .form-container {
+        margin: 60px 10px;
+        padding: 15px;
+      }
+    }
+
     body {
       font-family: 'Oswald', sans-serif;
       background: url('https://ade4f73eac.cbaul-cdnwnd.com/d29e511b2e753e48f1d0368efccf6050/200000002-ecc09ecc0c/ll75Ovh%20%281%29.png?ph=ade4f73eac') no-repeat center center fixed;
-      background-size: cover;
       margin: 0;
       padding: 0;
       display: flex;
@@ -47,7 +170,7 @@
       color: #03521b;
     }
     .form-container {
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(28, 24, 16, 0.95);
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
@@ -58,11 +181,11 @@
     h1 {
       text-align: center;
       margin-bottom: 10px;
-      color: #03521b;
+      color: var(--lssd-gold);
       text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.7);
     }
     h2 {
-      color: #03521b;
+      color: var(--lssd-gold);
       margin-top: 20px;
       text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
     }
@@ -86,14 +209,14 @@
       color: #000;
     }
     button {
-      background-color: #03521b;
+      background-color: var(--lssd-green);
       color: #fff;
-      border: none;
+      border: 1px solid var(--lssd-gold);
       cursor: pointer;
       transition: background-color 0.3s, transform 0.2s;
     }
     button:hover {
-      background-color: #071922;
+      background-color: var(--lssd-brown);
       transform: scale(1.05);
     }
     /* Spinner styles */
@@ -114,67 +237,469 @@
       0% { transform: translate(-50%, -50%) rotate(0deg); }
       100% { transform: translate(-50%, -50%) rotate(360deg); }
     }
-  </style>
+
+    /* New features */
+    .character-limit {
+      font-size: 12px;
+      color: #888;
+      text-align: right;
+    }
+
+    .form-field {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .form-tips {
+      font-size: 12px;
+      color: var(--lssd-green);
+      margin-top: 5px;
+    }
+
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px;
+      background: var(--lssd-green);
+      color: white;
+      border-radius: 5px;
+      display: none;
+      z-index: 1000;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); }
+      to { transform: translateX(0); }
+    }
+
+    /* Nové styly */
+    .theme-switch {
+      position: fixed;
+      right: 20px;
+      top: 20px;
+      z-index: 1000;
+      background: var(--lssd-brown);
+      color: var(--lssd-gold);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: 2px solid var(--lssd-gold);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+
+    .theme-switch:hover {
+      transform: scale(1.1);
+      background: var(--lssd-dark);
+    }
+
+    .theme-switch i {
+      font-size: 14px;
+    }
+
+    .dark-mode .theme-switch {
+      background: #333;
+    }
+
+    .dark-mode {
+      background: #1a1a1a;
+      color: #fff;
+    }
+
+    .floating-help {
+      position: fixed;
+      left: 20px;
+      bottom: 20px;
+      padding: 15px;
+      background: var(--lssd-green);
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    .tooltip-popup {
+      display: none;
+      position: absolute;
+      background: rgba(0,0,0,0.9);
+      padding: 10px;
+      border-radius: 5px;
+      max-width: 200px;
+    }
+
+    .success-animation {
+      animation: successPulse 0.5s ease;
+    }
+
+    @keyframes successPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .form-section {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease;
+    }
+
+    .form-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .error-shake {
+      animation: shake 0.5s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+
+    /* Styl pro povinná pole */
+    .required::after {
+      content: ' *';
+      color: #ff4444;
+      font-weight: bold;
+    }
+
+    /* Upravený světlý režim */
+    .form-container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 30px;
+      background: rgba(28, 24, 16, 0.95);
+    }
+
+    .dark-mode .form-container {
+      background: rgba(28, 24, 16, 0.98);
+    }
+
+    /* Upravené logo */
+    .logo-header {
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+    }
+
+    .logo-header img {
+      height: 60px;
+      opacity: 0.8;
+      transition: all 0.3s ease;
+    }
+
+    .logo-header img:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+    /* Discord Preview */
+    .discord-preview {
+      background: #36393f;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 10px 0;
+      display: none;
+    }
+
+    .discord-preview .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .discord-tag {
+      color: #7289da;
+      font-size: 14px;
+    }
+
+    /* Nové animace */
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .floating {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    /* Discord validace */
+    .discord-valid {
+      border-color: #43b581 !important;
+    }
+
+    .discord-invalid {
+      border-color: #f04747 !important;
+    }
+
+    /* Tooltip vylepšení */
+    .tooltip-popup {
+      background: rgba(28, 24, 16, 0.98);
+      border: 1px solid var(--lssd-gold);
+      padding: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    /* Status indikátor */
+    .status-indicator {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px;
+      background: var(--lssd-green);
+      border-radius: 5px;
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    /* Vylepšené vstupní pole */
+    input:focus, textarea:focus, select:focus {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(196, 166, 107, 0.2);
+    }
+
+    /* Sekce pro chyby */
+    .error-list {
+      background: rgba(240, 71, 71, 0.1);
+      border-left: 3px solid #f04747;
+      padding: 10px;
+      margin: 10px 0;
+      display: none;
+    }
+
+    /* Nové formulářové prvky */
+    .input-group {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--lssd-brown);
+    }
+
+    .input-with-icon {
+      padding-left: 35px;
+    }
+
+    /* Nové komponenty */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    .badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: var(--lssd-accent);
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: var(--lssd-dark);
+    }
+
+    /* Nové třídy pro validaci */
+    .field-valid {
+      border-color: var(--lssd-success) !important;
+      background: rgba(67, 181, 129, 0.05);
+    }
+
+    .field-invalid {
+      border-color: var(--lssd-error) !important;
+      background: rgba(240, 71, 71, 0.05);
+    }
+
+    /* Progress steps */
+    .form-steps {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+
+    .step {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      position: relative;
+      color: var(--lssd-gold);
+    }
+
+    .step.active {
+      color: var(--lssd-accent);
+    }
+
+    /* Plovoucí panel nástrojů */
+    .toolbar {
+      position: fixed;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(28, 24, 16, 0.9);
+      padding: 10px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* Nové styly pro input fields */
+    .input-wrapper {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .input-wrapper::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--lssd-gold);
+      transition: var(--transition-smooth);
+    }
+
+    .input-wrapper:focus-within::after {
+      width: 100%;
+    }
+    </style>
+
+    <!-- Přidat Font Awesome pro ikony -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-  <!-- Navbar with Icons -->
-  <div class="navbar">
-    <a href="home.html"><i class="fas fa-home"></i> Domů</a>
-    <a href="#"><i class="fas fa-envelope"></i> Kontakt</a>
+  <!-- Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Logo header -->
+  <div class="logo-header">
+    <img src="https://www.lssd.cz/wp-content/uploads/2024/01/Ce1JUe9.png" alt="LSSD Logo">
+  </div>
+
+  <!-- Upravený theme switch -->
+  <button class="theme-switch" onclick="toggleTheme()" title="Přepnout motiv">
+    <i class="fas fa-sun" id="themeIcon"></i>
+  </button>
+
+  <!-- Nové elementy -->
+  <div class="floating-help" onclick="showHelp()">?</div>
+
+  <div class="notification" id="notification"></div>
+
+  <!-- Discord Preview -->
+  <div class="discord-preview" id="discordPreview">
+    <img src="https://cdn.discordapp.com/embed/avatars/0.png" class="avatar">
+    <span class="discord-tag" id="previewTag"></span>
+  </div>
+
+  <!-- Nové HTML elementy -->
+  <div class="page-loader">
+    <div class="loader-content">
+      <img src="[LSSD_LOGO]" alt="LSSD" class="loader-logo">
+      <div class="loader-text">Načítání...</div>
+    </div>
+  </div>
+
+  <div class="floating-menu">
+    <button class="menu-item" title="Uložit"><i class="fas fa-save"></i></button>
+    <button class="menu-item" title="Reset"><i class="fas fa-undo"></i></button>
+    <button class="menu-item" title="Nápověda"><i class="fas fa-question"></i></button>
+  </div>
+
+  <!-- Přidat nové elementy před formulář -->
+  <div class="toolbar">
+    <button title="Uložit koncept" onclick="saveDraft()"><i class="fas fa-save"></i></button>
+    <button title="Načíst koncept" onclick="loadDraft()"><i class="fas fa-folder-open"></i></button>
+    <button title="Reset formuláře" onclick="resetForm()"><i class="fas fa-undo"></i></button>
+    <button title="Kontrola pravopisu" onclick="checkSpelling()"><i class="fas fa-spell-check"></i></button>
+    <button title="Nápověda" onclick="showHelp()"><i class="fas fa-question"></i></button>
+  </div>
+
+  <!-- Progress kroky -->
+  <div class="form-steps">
+    <div class="step active">Osobní údaje</div>
+    <div class="step">Zkušenosti</div>
+    <div class="step">Motivace</div>
+    <div class="step">Kontrola</div>
   </div>
 
   <!-- Form Section -->
   <div class="form-container">
     <h1>Los Santos Sheriff Department Academy</h1>
-    <p>Vyplňte tento formulář, pokud máte zájem připojit se k Los Santos Police Department (LSPD) jako kadet. Pečlivě vyplňte všechny požadované informace a ujistěte se, že jsou pravdivé a přesné. Po odeslání bude vaše přihláška posouzena a v případě splnění požadavků budete pozváni na pohovor.</p>
+    <p>Vyplňte tento formulář, pokud máte zájem připojit se k Los Santos Sheriff Department (LSSD) jako kadet. Pečlivě vyplňte všechny požadované informace a ujistěte se, že jsou pravdivé a přesné. Po odeslání bude vaše přihláška posouzena a v případě splnění požadavků budete pozváni na pohovor.</p>
     
     <form id="lspdForm">
-      <h2>OOC Kategorie</h2>
-      <label for="discordNick">Váš Discord nickname:</label>
+      <div class="section-header">
+        <h2>OOC Kategorie</h2>
+      </div>
+      <label for="discordNick" class="required">Váš Discord nickname:</label>
       <input type="text" id="discordNick" name="discordNick" required>
 
-      <label for="oocAge">Váš OOC věk:</label>
+      <label for="oocAge" class="required">Váš OOC věk:</label>
       <input type="number" id="oocAge" name="oocAge" required>
 
-      <label for="rpExperience">Vaše RP zkušenosti:</label>
+      <label for="rpExperience" class="required">Vaše RP zkušenosti:</label>
       <textarea id="rpExperience" name="rpExperience" rows="3" required></textarea>
 
-      <h2>Kategorie In Character</h2>
-      <label for="icName">Vaše celé jméno:</label>
+      <div class="section-header">
+        <h2>Kategorie In Character</h2>
+      </div>
+      <label for="icName" class="required">Vaše celé jméno:</label>
       <input type="text" id="icName" name="icName" required>
 
-      <label for="birthDate">Vaše datum narození:</label>
+      <label for="birthDate" class="required">Vaše datum narození:</label>
       <input type="date" id="birthDate" name="birthDate" required>
 
-      <label for="education">Vaše nejvyšší dosažené vzdělání:</label>
+      <label for="education" class="required">Vaše nejvyšší dosažené vzdělání:</label>
       <input type="text" id="education" name="education" required>
 
-      <label>Máte čistý trestní rejstřík?</label>
+      <label class="required">Máte čistý trestní rejstřík?</label>
       <select id="cleanRecord" name="cleanRecord" required>
         <option value="Ano">Ano</option>
         <option value="Ne">Ne</option>
       </select>
 
-      <label>Jste ochoten/ochotna projít fyzickými a psychologickými testy?</label>
+      <label class="required">Jste ochoten/ochotna projít fyzickými a psychologickými testy?</label>
       <select id="testsWilling" name="testsWilling" required>
         <option value="Ano">Ano</option>
         <option value="Ne">Ne</option>
       </select>
 
-      <label>Jste obeznámen/a s pravidly a standardy LSSD?</label>
+      <label class="required">Jste obeznámen/a s pravidly a standardy LSSD?</label>
       <select id="rulesAware" name="rulesAware" required>
         <option value="Ano">Ano</option>
         <option value="Ne">Ne</option>
       </select>
 
-      <label for="whyJoin">Proč chcete vstoupit do LSSD?</label>
+      <label for="whyJoin" class="required">Proč chcete vstoupit do LSSD?</label>
       <textarea id="whyJoin" name="whyJoin" rows="3" required></textarea>
 
-      <label for="experience">Máte nějaké předchozí zkušenosti v oblasti bezpečnosti nebo veřejné správy?</label>
+      <label for="experience" class="required">Máte nějaké předchozí zkušenosti v oblasti bezpečnosti nebo veřejné správy?</label>
       <textarea id="experience" name="experience" rows="3" required></textarea>
 
-      <label for="strengths">Jaké dovednosti nebo vlastnosti považujete za své silné stránky?</label>
+      <label for="strengths" class="required">Jaké dovednosti nebo vlastnosti považujete za své silné stránky?</label>
       <textarea id="strengths" name="strengths" rows="3" required></textarea>
 
       <button type="button" onclick="submitForm()">Odeslat</button>
@@ -212,14 +737,16 @@
         whyJoin: document.getElementById('whyJoin').value,
         experience: document.getElementById('experience').value,
         strengths: document.getElementById('strengths').value,
+        phone: document.getElementById('phone').value,
+        availability: document.getElementById('availability').value,
       };
 
       const embedMessage = {
-        content: "# NOVÁ PŘIHLÁŠKA! @everyone",
+        content: `<@&1334842242543652935> Nová přihláška!`,
         embeds: [
           {
-            title: "Nová Přihláška do LSSD TRAINEE PROGRAMU",
-            color: 3447003,
+            title: "Nová přihláška do LSSD TRAINEE PROGRAMU",
+            color: 0x03521b,
             fields: [
               {
                 name: "**OOC Kategorie**",
@@ -260,27 +787,34 @@
                 name: "Doplňující informace",
                 value: `**Důvod:** ${formData.whyJoin}\n**Zkušenosti:** ${formData.experience}\n**Silné stránky:** ${formData.strengths}`,
                 inline: false
+              },
+              {
+                name: "Kontaktní informace",
+                value: `**Telefon:** ${formData.phone}\n**Dostupnost:** ${formData.availability}`,
+                inline: false
               }
-            ]
+            ],
+            footer: {
+              text: "LSSD Recruitment System"
+            },
+            timestamp: new Date().toISOString()
           }
         ],
-        // Používáme URL tlačítka – tato tlačítka nejsou interaktivní ve smyslu odesílání události zpět na server,
-        // ale přesměrují uživatele na danou URL.
         components: [
           {
             type: 1,
             components: [
               {
                 type: 2,
-                label: "Schválit",
-                style: 5, // Styl "URL tlačítko" (modré)
-                url: "https://example.com/approve"  // Zadej URL pro schválení
+                style: 3,
+                label: "✅ Schválit",
+                custom_id: "approve_application"
               },
               {
                 type: 2,
-                label: "Zamítnout",
-                style: 5, // Styl "URL tlačítko" (modré)
-                url: "https://example.com/reject"   // Zadej URL pro zamítnutí
+                style: 4,
+                label: "❌ Zamítnout",
+                custom_id: "reject_application"
               }
             ]
           }
@@ -297,19 +831,431 @@
         document.getElementById('loadingSpinner').style.display = 'none';
         
         if (response.ok) {
-          alert('Formulář byl úspěšně odeslán!');
+          showNotification('Přihláška byla úspěšně odeslána!');
           document.getElementById('lspdForm').reset();
         } else {
-          alert('Došlo k chybě při odesílání formuláře.');
+          showNotification('Došlo k chybě při odesílání formuláře.');
         }
       })
       .catch(error => {
         // Skrytí načítacího spinneru
         document.getElementById('loadingSpinner').style.display = 'none';
         console.error('Error:', error);
-        alert('Došlo k chybě při odesílání formuláře.');
+        showNotification('Došlo k chybě při odesílání formuláře.');
       });
     }
+
+    // Progress bar update on scroll
+    window.onscroll = function() {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      document.getElementById("progressBar").style.width = scrolled + "%";
+    };
+
+    // Form field animations
+    document.querySelectorAll('input, textarea, select').forEach(element => {
+      element.addEventListener('focus', function() {
+        this.style.transform = 'scale(1.02)';
+        this.style.transition = 'transform 0.3s ease';
+      });
+
+      element.addEventListener('blur', function() {
+        this.style.transform = 'scale(1)';
+      });
+    });
+
+    // Form validation with visual feedback
+    function validateForm() {
+      let isValid = true;
+      const inputs = document.querySelectorAll('input[required], textarea[required], select[required]');
+      
+      inputs.forEach(input => {
+        if (!input.value.trim()) {
+          input.style.borderColor = '#ff4444';
+          isValid = false;
+        } else {
+          input.style.borderColor = '#00C851';
+        }
+      });
+
+      // Age validation
+      const age = document.getElementById('oocAge').value;
+      if (age < 15) {
+        isValid = false;
+        showNotification('Minimální věk je 15 let');
+      }
+
+      // Discord formát
+      const discordInput = document.getElementById('discordNick').value;
+      if (!discordInput.match(/^.{3,32}#[0-9]{4}$/)) {
+        showNotification('Discord tag musí být ve formátu Uživatel#0000');
+        return false;
+      }
+      
+      // Minimální délky
+      const minLengths = {
+        'rpExperience': 100,
+        'whyJoin': 150,
+        'experience': 50,
+        'strengths': 50
+      };
+
+      for (const [fieldId, minLength] of Object.entries(minLengths)) {
+        const field = document.getElementById(fieldId);
+        if (field.value.length < minLength) {
+          showNotification(`Pole ${fieldId} musí obsahovat alespoň ${minLength} znaků`);
+          return false;
+        }
+      }
+
+      return isValid;
+    }
+
+    // Update submit function
+    const originalSubmitForm = submitForm;
+    submitForm = function() {
+      if (!validateForm()) {
+        showNotification('Prosím vyplňte všechna povinná pole.');
+        return;
+      }
+      originalSubmitForm();
+    }
+
+    // Auto-save draft every minute
+    setInterval(() => {
+      const formData = {};
+      document.querySelectorAll('input, textarea, select').forEach(input => {
+        formData[input.id] = input.value;
+      });
+      localStorage.setItem('formDraft', JSON.stringify(formData));
+    }, 60000);
+
+    // Load saved draft on page load
+    window.addEventListener('load', function() {
+      const savedDraft = localStorage.getItem('formDraft');
+      if (savedDraft) {
+        const formData = JSON.parse(savedDraft);
+        Object.keys(formData).forEach(key => {
+          const input = document.getElementById(key);
+          if (input) input.value = formData[key];
+        });
+      }
+    });
+
+    // New Features
+    function showNotification(message) {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.style.display = 'block';
+      setTimeout(() => {
+        notification.style.display = 'none';
+      }, 3000);
+    }
+
+    // Character counter for textareas
+    document.querySelectorAll('textarea').forEach(textarea => {
+      const limit = textarea.getAttribute('maxlength') || 500;
+      const counter = document.createElement('div');
+      counter.className = 'character-limit';
+      textarea.parentNode.appendChild(counter);
+
+      textarea.addEventListener('input', function() {
+        counter.textContent = `${this.value.length}/${limit} znaků`;
+      });
+    });
+
+    // Nové funkce
+    function toggleTheme() {
+      const isDark = document.body.classList.toggle('dark-mode');
+      const icon = document.getElementById('themeIcon');
+      
+      if (isDark) {
+        icon.className = 'fas fa-moon';
+      } else {
+        icon.className = 'fas fa-sun';
+      }
+      
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    }
+
+    function showHelp() {
+      showNotification('Nápověda: Vyplňte všechna pole označená hvězdičkou.');
+    }
+
+    // Intersection Observer pro scroll animace
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    });
+
+    document.querySelectorAll('.form-section').forEach(section => {
+      observer.observe(section);
+    });
+
+    // Form validation improvements
+    function validateForm() {
+      let isValid = true;
+      const inputs = document.querySelectorAll('[required]');
+      
+      inputs.forEach(input => {
+        if (!input.value.trim()) {
+          input.classList.add('error-shake');
+          setTimeout(() => input.classList.remove('error-shake'), 500);
+          isValid = false;
+        }
+      });
+
+      // Kontrola věku
+      const age = document.getElementById('oocAge').value;
+      if (age < 15 || age > 99) {
+        showNotification('Věk musí být mezi 15 a 99 lety');
+        isValid = false;
+      }
+
+      // Kontrola délky Discord nicku
+      const discord = document.getElementById('discordNick').value;
+      if (!discord.includes('#')) {
+        showNotification('Discord nickname musí obsahovat #');
+        isValid = false;
+      }
+
+      // Discord formát
+      const discordInput = document.getElementById('discordNick').value;
+      if (!discordInput.match(/^.{3,32}#[0-9]{4}$/)) {
+        showNotification('Discord tag musí být ve formátu Uživatel#0000');
+        return false;
+      }
+      
+      // Minimální délky
+      const minLengths = {
+        'rpExperience': 100,
+        'whyJoin': 150,
+        'experience': 50,
+        'strengths': 50
+      };
+
+      for (const [fieldId, minLength] of Object.entries(minLengths)) {
+        const field = document.getElementById(fieldId);
+        if (field.value.length < minLength) {
+          showNotification(`Pole ${fieldId} musí obsahovat alespoň ${minLength} znaků`);
+          return false;
+        }
+      }
+
+      return isValid;
+    }
+
+    // Přidání nových event listenerů
+    document.addEventListener('DOMContentLoaded', () => {
+      // Načtení uloženého tématu
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('themeIcon').className = 'fas fa-moon';
+      }
+
+      // Automatické ukládání
+      let typingTimer;
+      const inputs = document.querySelectorAll('input, textarea, select');
+      inputs.forEach(input => {
+        input.addEventListener('input', () => {
+          clearTimeout(typingTimer);
+          typingTimer = setTimeout(() => {
+            localStorage.setItem('formDraft', JSON.stringify(getFormData()));
+            showNotification('Formulář automaticky uložen');
+          }, 1000);
+        });
+      });
+
+      // Přidat hvězdičky k povinným polím při načtení
+      document.querySelectorAll('input[required], textarea[required], select[required]').forEach(input => {
+        const label = document.querySelector(`label[for="${input.id}"]`);
+        if (label) {
+          label.classList.add('required');
+        }
+      });
+    });
+
+    // Nové pomocné funkce
+    function getFormData() {
+      const formData = {};
+      document.querySelectorAll('input, textarea, select').forEach(input => {
+        formData[input.id] = input.value;
+      });
+      return formData;
+    }
+
+    function resetForm() {
+      if (confirm('Opravdu chcete vymazat všechna data?')) {
+        document.getElementById('lspdForm').reset();
+        localStorage.removeItem('formDraft');
+        showNotification('Formulář byl vymazán');
+      }
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.key === 's') {
+        e.preventDefault();
+        submitForm();
+      }
+      if (e.ctrlKey && e.key === 'r') {
+        e.preventDefault();
+        resetForm();
+      }
+    });
+
+    // Discord validace
+    document.getElementById('discordNick').addEventListener('input', function() {
+      const input = this.value;
+      const preview = document.getElementById('discordPreview');
+      const previewTag = document.getElementById('previewTag');
+      
+      if (input.match(/^.{3,32}#[0-9]{4}$/)) {
+          this.classList.add('discord-valid');
+          this.classList.remove('discord-invalid');
+          preview.style.display = 'flex';
+          previewTag.textContent = input;
+      } else {
+          this.classList.add('discord-invalid');
+          this.classList.remove('discord-valid');
+          preview.style.display = 'none';
+      }
+    });
+
+    // Auto-save vylepšení
+    let saveTimeout;
+    function autoSave() {
+      clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(() => {
+          const formData = getFormData();
+          localStorage.setItem('formDraft', JSON.stringify({
+              ...formData,
+              timestamp: new Date().toISOString()
+          }));
+          
+          const status = document.createElement('div');
+          status.className = 'status-indicator';
+          status.textContent = 'Automaticky uloženo';
+          document.body.appendChild(status);
+          
+          setTimeout(() => status.remove(), 2000);
+      }, 1000);
+    }
+
+    // Nové funkce pro formulář
+    const formFeatures = {
+      init() {
+          this.setupFormSteps();
+          this.setupAutoSave();
+          this.setupValidation();
+          this.setupSpellCheck();
+          this.setupShortcuts();
+          this.setupProgressTracking();
+      },
+
+      setupFormSteps() {
+          const steps = document.querySelectorAll('.step');
+          let currentStep = 0;
+
+          function updateSteps() {
+              steps.forEach((step, index) => {
+                  step.classList.toggle('active', index === currentStep);
+              });
+          }
+
+          // Přidat navigační tlačítka
+          const nav = document.createElement('div');
+          nav.className = 'step-navigation';
+          nav.innerHTML = `
+              <button onclick="formFeatures.prevStep()">Předchozí</button>
+              <button onclick="formFeatures.nextStep()">Další</button>
+          `;
+          document.querySelector('.form-container').appendChild(nav);
+      },
+
+      setupSpellCheck() {
+          const textInputs = document.querySelectorAll('textarea');
+          textInputs.forEach(input => {
+              input.addEventListener('blur', () => {
+                  // Simulace kontroly pravopisu
+                  const text = input.value;
+                  const words = text.split(' ');
+                  const mistakes = words.filter(word => word.length < 2);
+                  if (mistakes.length > 0) {
+                      showNotification('Pozor na překlepy a krátká slova!');
+                  }
+              });
+          });
+      },
+
+      setupProgressTracking() {
+          const inputs = document.querySelectorAll('input, textarea, select');
+          const total = inputs.length;
+          let completed = 0;
+
+          inputs.forEach(input => {
+              input.addEventListener('change', () => {
+                  completed = Array.from(inputs).filter(i => i.value.trim() !== '').length;
+                  const progress = (completed / total) * 100;
+                  document.getElementById('progressBar').style.width = `${progress}%`;
+              });
+          });
+      }
+    };
+
+    // Vylepšení validace
+    function enhancedValidation() {
+      const validators = {
+          discordNick: (value) => /^.{3,32}#[0-9]{4}$/.test(value),
+          oocAge: (value) => value >= 15 && value <= 99,
+          rpExperience: (value) => value.length >= 100,
+          icName: (value) => /^[A-Za-z\s]{2,}$/.test(value),
+          birthDate: (value) => {
+              const date = new Date(value);
+              return date <= new Date();
+          }
+      };
+
+      return Object.entries(validators).every(([field, validator]) => {
+          const element = document.getElementById(field);
+          const isValid = validator(element.value);
+          element.classList.toggle('field-valid', isValid);
+          element.classList.toggle('field-invalid', !isValid);
+          return isValid;
+      });
+    }
+
+    // Vylepšení automatického ukládání
+    function improvedAutoSave() {
+      const formData = getFormData();
+      const saveData = {
+          ...formData,
+          timestamp: new Date().toISOString(),
+          version: '1.0',
+          progress: calculateProgress()
+      };
+      
+      localStorage.setItem('formDraft', JSON.stringify(saveData));
+      showNotification('Automaticky uloženo', 'success');
+    }
+
+    // Nové pomocné funkce
+    function calculateProgress() {
+      const inputs = document.querySelectorAll('input, textarea, select');
+      const filled = Array.from(inputs).filter(input => input.value.trim() !== '').length;
+      return (filled / inputs.length) * 100;
+    }
+
+    // Inicializace
+    document.addEventListener('DOMContentLoaded', () => {
+      formFeatures.init();
+      // ...existing DOMContentLoaded code...
+    });
   </script>
 </body>
 </html>
